@@ -1,0 +1,40 @@
+var express = require('express'),
+  config = require('./config');
+
+
+var ejs = require('ejs');
+ejs.open = '<?';
+ejs.close = '?>';
+
+
+module.exports = function(app, config) {
+  app.configure(function () {
+    app.set('port', config.port);
+    app.set('views', config.root + '/app/views');
+    app.set('view engine', 'ejs');
+
+    app.use(express.compress());
+
+    app.use(express.favicon(config.root + '/public/img/favicon.ico'));
+    app.use('/c/', express.static(config.root + '/compiled/'));
+    app.use(express.static(config.root + '/public/'));
+
+    app.use(express.logger('dev'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+
+    // development only
+    if ('development' == app.get('env')) {
+      app.use(express.errorHandler());
+    }
+
+    // Main routing table
+    app.use(app.router);
+
+    // And the 404 finally
+    app.use(function(req, res) {
+      res.status(404).render('misc/404', { title: '404' });
+    });
+
+  });
+};
