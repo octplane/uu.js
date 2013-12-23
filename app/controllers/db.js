@@ -1,5 +1,5 @@
 var  config = require("../../config/config");
-var db = require('nosql').load(config.db_file);
+var db = require('nosql').load(config.db_file, config.db_binary_directory);
 
 
 exports.save = function(identifier, content, cb) {

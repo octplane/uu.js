@@ -8,11 +8,14 @@ var db_path = path.join( process.env['UU_PATH'] ||
       ".uu/");
 
 var db_file = path.join(db_path, "paste_db");
+var db_binary = path.join(db_path, "binary_files");
 
-if(!fs.existsSync(db_path)) {
-  console.log("Creating folder %s...", db_path);
-  fs.mkdirSync(db_path, "0700");
-}
+[db_path, db_binary].forEach(function(folder) {
+  if(!fs.existsSync(folder)) {
+    console.log("Creating folder %s...", folder);
+    fs.mkdirSync(folder, "0700");
+  }  
+});
 
 var config = {
   development: {
@@ -45,3 +48,4 @@ module.exports = config[env];
 
 config[env].db_path = db_path;
 config[env].db_file = db_file;
+config[env].db_binary_directory = db_binary;

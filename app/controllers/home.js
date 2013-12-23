@@ -1,8 +1,7 @@
 var	crc32 = require('crc32'),
 	btoa = require('btoa'),
-	moment = require('moment'),
-	form = require('formidable');
-
+	fs = require('fs'),
+	moment = require('moment');
 var db = require("./db");
 
 var timespan = require("../models/timespan");
@@ -40,8 +39,7 @@ exports.about = function(req, res) {
 
 exports.view_paste = function(req, res) {
 	var id = req.params.id;
-
-	if (!id) {
+	if (!id) {	
 		res.send(404, "No identifier provided");
 	}
 	db.find_one(id, function(err, doc) {
@@ -59,7 +57,27 @@ exports.view_paste = function(req, res) {
 	});
 };
 
-exports.upload = function(req, res) {
-	var c = req.body.content;
+exports.paste = function(req, res) {
+	console.log(req.body);
+	var paste = {
+		content: req.body.content,
+		expire: timespan.convertPostToDuration(req.body.expiry_delay, req.body.never_expire),
+		never: req.body.never_expire,
+		attachments: req.body.attachments
+	}
+	db.save(smallHash(JSON.stringify(paste)), paste, function(err, identifier) {
+		res.send(200, "/p/" + identifier);
+	});
 
-}
+};
+
+exports.upload = function(req, res) {
+	console.log(req.files);
+	var f = req.files.file;
+	fs.readFile(f.path, function(err, data) {
+		var id = db.binary.insert(f.name, f.type, data);
+		console.log(id);
+		res.send(200, "/a/" + id );
+	})
+	
+};
