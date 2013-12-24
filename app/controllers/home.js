@@ -1,6 +1,5 @@
 var	crc32 = require('crc32'),
 	btoa = require('btoa'),
-	fs = require('fs'),
 	moment = require('moment');
 var db = require("./db");
 
@@ -74,10 +73,8 @@ exports.paste = function(req, res) {
 exports.upload = function(req, res) {
 	console.log(req.files);
 	var f = req.files.file;
-	fs.readFile(f.path, function(err, data) {
-		var id = db.binary.insert(f.name, f.type, data);
+	db.save_binary(f, function(err, id) {
 		console.log(id);
 		res.send(200, "/a/" + id );
 	})
-	
 };

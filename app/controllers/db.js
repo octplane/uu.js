@@ -1,5 +1,6 @@
 var  config = require("../../config/config");
 var db = require('nosql').load(config.db_file, config.db_binary_directory);
+var fs = require('fs');
 
 
 exports.save = function(identifier, content, cb) {
@@ -16,5 +17,14 @@ exports.find_one = function(identifier, cb) {
 			return doc; 
 	}, function(doc) {
 		cb(null, doc);
+	});
+}
+
+exports.save_binary = function(file, cb) {
+	fs.readFile(file.path, function(err, data) {
+		var id = db.binary.insert(file.name, file.type, data);
+		// strip identifier
+		id = id.replace(db.name + "#", "");
+		cb(null, id);
 	});
 }
