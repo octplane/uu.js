@@ -7,7 +7,7 @@ module.exports = function(app){
 	app.get('/', home.index);
 	app.get('/about', home.about);
 	app.get('/p/:id', home.view_paste);
-  app.get('/a/:id.:ext', home.view_attn);
+	app.get('/a/:id.:ext', home.view_attn);
 
 	app.post('/paste', home.paste);
 	app.post('/file-upload', home.upload);

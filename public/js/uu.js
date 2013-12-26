@@ -161,18 +161,8 @@ $(document).ready(function() {
   Dropzone.options.uploader = {
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 10, // MB
-<<<<<<< Updated upstream
-  success: function(file, text) {
-    var attachment_name = "Attachment:"+text+"\n";
-    $("#attachments").append(attachment_name);
-    return file.previewElement.classList.add("dz-success");
-  },
-=======
->>>>>>> Stashed changes
   init: function() {
-    debugger;
     this.on("sending", function(file, xhr, formdata) {
-      debugger;
       var expiry;
       $("#gl-but").attr("disabled", "disabled");
       $("#gl-but").text("Upload in progress");
@@ -185,8 +175,11 @@ $(document).ready(function() {
     });
 
     this.on("success", function(file, text) {
-      debugger;
-      var attachment_name = "Attachment:"+text+"\n";
+      var ext = '';
+      // compute extname
+      if (file.name.indexOf('.') > 0)
+        ext = file.name.replace(/^.*\.([^\.]+)$/,".$1");
+      var attachment_name = "Attachment:"+text+ext+"\n";
       $("#attachments").append(attachment_name);
       return file.previewElement.classList.add("dz-success");
     });

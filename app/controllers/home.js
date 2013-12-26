@@ -65,16 +65,8 @@ exports.view_attn = function(req, res) {
 			console.log(err);
 			res.send(500, "Error retrieving "+id);
 		}
-
-		// header.name;   - file name
-		// header.size;   - file size
-		// header.type;   - content type
-		// header.width;  - image width
-		// header.height; - image height
-		stream.pipe(fs.createWriteStream('/tmp/out.png'));
-		res.send(200, "yo" + header.size);
-		// res.type(header.type);
-		// stream.pipe(res);
+		res.type(header.type);
+		stream.pipe(res);
 	});
 }
 
