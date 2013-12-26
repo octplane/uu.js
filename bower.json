@@ -1,0 +1,27 @@
+{
+  "name": "uu.js",
+  "main": "index.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/octplane/uu.js",
+  "authors": [
+    "Pierre Baillet <pierre@baillet.name>"
+  ],
+  "description": "Private Paste, with AES encryption",
+  "keywords": [
+    "paste",
+    "encrypted"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "dropzone": "~3.8.2",
+    "sjcl": "~1.0.0",
+    "highlightjs": "~7.5.0"
+  }
+}

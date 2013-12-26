@@ -93,7 +93,6 @@ exports.paste = function(req, res) {
 };
 
 exports.upload = function(req, res) {
-	console.log(req.files);
 	var f = req.files.file;
 	db.save_binary(f, function(err, id) {
 		res.send(200, "/a/" + id );
