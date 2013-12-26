@@ -38,7 +38,7 @@ exports.about = function(req, res) {
 
 exports.view_paste = function(req, res) {
 	var id = req.params.id;
-	if (!id) {	
+	if (!id) {
 		res.send(404, "No identifier provided");
 	}
 	db.find_one(id, function(err, doc) {
@@ -55,6 +55,28 @@ exports.view_paste = function(req, res) {
 		}
 	});
 };
+
+var fs = require("fs");
+
+exports.view_attn = function(req, res) {
+	var id = req.params.id;
+	db.read_binary(id, function(err, stream, header) {
+		if (err) {
+			console.log(err);
+			res.send(500, "Error retrieving "+id);
+		}
+
+		// header.name;   - file name
+		// header.size;   - file size
+		// header.type;   - content type
+		// header.width;  - image width
+		// header.height; - image height
+		stream.pipe(fs.createWriteStream('/tmp/out.png'));
+		res.send(200, "yo" + header.size);
+		// res.type(header.type);
+		// stream.pipe(res);
+	});
+}
 
 exports.paste = function(req, res) {
 	console.log(req.body);
@@ -74,7 +96,6 @@ exports.upload = function(req, res) {
 	console.log(req.files);
 	var f = req.files.file;
 	db.save_binary(f, function(err, id) {
-		console.log(id);
 		res.send(200, "/a/" + id );
 	})
 };

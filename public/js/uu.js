@@ -162,7 +162,7 @@ $(document).ready(function() {
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 10, // MB
   success: function(file, text) {
-    var attachment_name = "Attachment:/a/"+text+"\n";
+    var attachment_name = "Attachment:"+text+"\n";
     $("#attachments").append(attachment_name);
     return file.previewElement.classList.add("dz-success");
   },
@@ -197,7 +197,7 @@ function loadCssAtIdentifier(cssName, identifier)
           href: cssName +'.css'
   });
   $("#" + identifier).remove();
-  $("head").append( link ); 
+  $("head").append( link );
 }
 
 function setPasteto(content, lang) {
