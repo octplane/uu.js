@@ -43,12 +43,16 @@ exports.view_paste = function(req, res) {
 	}
 	db.find_one(id, function(err, doc) {
 		if (doc) {
+			var att = [];
+			doc.attachments.forEach(function(at) {
+				att.push("Attachment:/a/" + at.aid + "." + at.aext );
+			});
 			res.render('index', {
 				title: 'Paste ' + id,
 				encrypted_content: doc.content,
 				expire: doc.expire == -1 ? "" : moment(doc.expire).fromNow(),
 				never: doc.expire == -1,
-				attachments: doc.attachments
+				attachments: att.join("\n")
 			});
 		} else {
 			res.send(404, id + " not found.");
@@ -76,7 +80,7 @@ exports.paste = function(req, res) {
 		content: req.body.content,
 		expire: timespan.convertPostToDuration(req.body.expiry_delay, req.body.never_expire),
 		never: req.body.never_expire,
-		attachments: req.body.attachments
+		attachments: JSON.parse(req.body.attachments)
 	}
 	db.save(smallHash(JSON.stringify(paste)), paste, function(err, identifier) {
 		res.send(200, "/p/" + identifier);
@@ -87,6 +91,6 @@ exports.paste = function(req, res) {
 exports.upload = function(req, res) {
 	var f = req.files.file;
 	db.save_binary(f, function(err, id) {
-		res.send(200, "/a/" + id );
+		res.send(200, id );
 	})
 };

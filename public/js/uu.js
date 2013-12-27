@@ -178,9 +178,19 @@ $(document).ready(function() {
       var ext = '';
       // compute extname
       if (file.name.indexOf('.') > 0)
-        ext = file.name.replace(/^.*\.([^\.]+)$/,".$1");
-      var attachment_name = "Attachment:"+text+ext+"\n";
-      $("#attachments").append(attachment_name);
+        ext = file.name.replace(/^.*\.([^\.]+)$/,"$1");
+      var input = $("#attachments");
+      var attachment = { aid: text, aext: ext };
+      var cAttachments;
+
+      if (input.text() != "") {
+        cAttachments = JSON.parse(input.text());
+      } else {
+        cAttachments = [];
+      }
+
+      cAttachments.push(attachment);
+      input.text(JSON.stringify(cAttachments));
       return file.previewElement.classList.add("dz-success");
     });
 

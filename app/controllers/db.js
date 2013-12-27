@@ -3,6 +3,33 @@ var db = require('nosql').load(config.db_file, config.db_binary_directory);
 var fs = require('fs');
 
 
+exports.cleanup = function(req, res, next) {
+	db.remove(function (doc) {
+		var willDelete = false;
+		console.log(doc);
+		if (doc.expire == -1)
+			willDelete = false;
+
+		if (!doc.expire)
+			willDelete = true
+
+		willDelete = (doc.expire - Date.now()) < 0;
+		if (!willDelete)
+			return false;
+		if (doc.attachments) {
+			doc.attachments.forEach(function(at) {
+				console.log("[CLEANUP] Deleting attachment " + at.aid);
+				db.binary.remove(at.aid);
+			});
+		}
+		return true;		
+	}, function(count) {
+		console.log("[CLEANUP] Removed "+count+ " items.");
+	}
+	);
+	next();
+}
+
 exports.save = function(identifier, content, cb) {
 	content._id = identifier;
 

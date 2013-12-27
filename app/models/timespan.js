@@ -1,6 +1,7 @@
 
 var ts = [
-	{ string: "30 min", duration: 1800,        default: false},
+	{ string: "5 minutes", duration: 300,      default: false},
+	{ string: "30 minutes", duration: 1800,    default: false},
 	{ string: "1 day",  duration: 86400,       default: false},
 	{ string: "1 hour", duration: 3600,        default: false},
 	{ string: "1 week", duration: 86400 * 7,   default: true},

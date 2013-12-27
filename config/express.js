@@ -1,5 +1,6 @@
 var express = require('express'),
-  config = require('./config');
+  config = require('./config'),
+  db = require("../app/controllers/db");
 
 
 var ejs = require('ejs');
@@ -30,6 +31,7 @@ module.exports = function(app, config) {
       app.use(express.errorHandler());
     }
 
+    app.use(db.cleanup);
     // Main routing table
     app.use(app.router);
 
