@@ -39,7 +39,7 @@ var config = {
     app: {
       name: 'uu.js'
     },
-    port: 3000
+    port: 8080
   }
 };
 
