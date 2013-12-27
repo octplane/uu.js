@@ -44,7 +44,7 @@ exports.view_paste = function(req, res) {
 	db.find_one(id, function(err, doc) {
 		if (doc) {
 			var att = [];
-			doc.attachments.forEach(function(at) {
+			doc.attachments && doc.attachments.forEach(function(at) {
 				att.push("Attachment:/a/" + at.aid + "." + at.aext );
 			});
 			res.render('index', {
@@ -76,11 +76,14 @@ exports.view_attn = function(req, res) {
 }
 
 exports.paste = function(req, res) {
+	var atts = null;
+	if (req.body.attachments != "")
+		atts = JSON.parse(req.body.attachments);
 	var paste = {
 		content: req.body.content,
 		expire: timespan.convertPostToDuration(req.body.expiry_delay, req.body.never_expire),
 		never: req.body.never_expire,
-		attachments: JSON.parse(req.body.attachments)
+		attachments: atts
 	}
 	db.save(smallHash(JSON.stringify(paste)), paste, function(err, identifier) {
 		res.send(200, "/p/" + identifier);
