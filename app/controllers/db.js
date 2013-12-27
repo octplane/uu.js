@@ -6,7 +6,6 @@ var fs = require('fs');
 exports.cleanup = function(req, res, next) {
 	db.remove(function (doc) {
 		var willDelete = false;
-		console.log(doc);
 		if (doc.expire == -1)
 			willDelete = false;
 
