@@ -69,13 +69,13 @@ exports.view_attn = function(req, res) {
 			console.log(err);
 			res.send(500, "Error retrieving "+id);
 		}
+		res.setHeader('Expires', 0);
 		res.type(header.type);
 		stream.pipe(res);
 	});
 }
 
 exports.paste = function(req, res) {
-	console.log(req.body);
 	var paste = {
 		content: req.body.content,
 		expire: timespan.convertPostToDuration(req.body.expiry_delay, req.body.never_expire),
