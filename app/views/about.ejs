@@ -3,12 +3,19 @@
 <div class="prison">
 <h1>About UU</h1>
 <p>UU is a privatepaste service.</p>
+<p>It name comes for the well known glue brand UHU.</p>
+<p>It was designed after <a href='http://stackoverflow.com/questions/9465215/pastie-with-api-and-language-detection'>I started looking</a> for such a tool and didn't find it. Thus, it has some interesting features.</p>
+<p>UU automatically performs some syntax highlighting on the text you paste in it.</p>
+<p>The pasted text is encrypted on the client using a generated key that is known only by the browser.</p>
+<p>The encrypted text is sent to the server and the server has no way to recover the encryption key.</p>
+<p>The paste expire after a given amount of time.</p>
 <p>You can paste any code or upload images and UU will generate a private url with a client-side only password that is never seen by the server.</p>
 <p>The paste is encrypted on the server and cannot be read without the key you have in the url</p>
+<p>The images or attachments you upload are not encrypted and clearly linked in the database server-side.<em>This could change someday.</em></p>
 <p>No javascript tracker, almost no log on the server, the service runs on a server that is not subject to any DMCA law (at least in the American sense).</p>
-<p>The paste expires after a given amount of time.</p>
-
-
+<p>The server offer absolutely no warranty. I can delete, stop, start, modify it at any time. However, I <b>cannot read your pastes</b>.
+<p>This version is the third version after a ruby and Go version. This one runs on nodejs and was probably the fastest I developed of the three.</p>
+<p>UU is open source and can be downloaded from <a href="https://github.com/octplane/uu.js">GitHub</a>.</p>
 </div>
 
 <? include footer ?>
