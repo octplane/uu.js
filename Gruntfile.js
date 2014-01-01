@@ -12,7 +12,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-recess');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  var reloadPort = 35729, files;
+  var reloadPort = 35730, files;
 
   var gruntConfiguration = {
     pkg: grunt.file.readJSON('package.json'),
