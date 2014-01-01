@@ -17,6 +17,8 @@ var db_binary = path.join(db_path, "binary_files");
   }  
 });
 
+var reloadPort = 35730;
+
 var config = {
   development: {
     root: rootPath,
@@ -26,6 +28,34 @@ var config = {
     port: 3000,
     defaultGrunt: ['develop', 'recess', 'uglify', 'watch'],
     gruntConfiguration: {
+      watch: {
+        options: {
+          livereload: reloadPort,
+          spawn: false
+        },
+        css: {
+          files: [ 'public/css/*.css' ],
+          tasks: [ 'recess' ]
+        },
+        public_js: {
+          files: [ 'public/js/*.js' ],
+          tasks: [ 'uglify' ]
+        },
+        js: {
+          files: [
+            'app.js',
+            'app/**/*.js',
+            'config/*.js',
+            'public/**/*'
+          ],
+          tasks: ['develop', 'delayed-livereload']
+        },
+        ejs: {
+          files: ['app/views/**/*.ejs'],
+          options: { livereload: reloadPort }
+        }
+      },
+
       uglify: {
         'app' : {
            options: {
@@ -36,6 +66,27 @@ var config = {
           }
         }
       }
+    },
+    extraHead: '<script type="text/javascript" src="//localhost:' + reloadPort + '/livereload.js"></script>',
+    performAdditionalConfiguration: function(grunt) {
+      var files;
+      grunt.config.requires('watch.js.files');
+      files = grunt.config('watch.js.files');
+      files = grunt.file.expand(files);
+
+      grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
+        var done = this.async();
+        setTimeout(function () {
+          request.get('http://localhost:35730/changed?files=' + files.join(','),  function(err, res) {
+              var reloaded = !err && res.statusCode === 200;
+              if (reloaded)
+                grunt.log.ok('Delayed live reload successful.');
+              else
+                grunt.log.error('Unable to make a delayed live reload.');
+              done(reloaded);
+            });
+        }, 500);
+      });
     }
   },
 
@@ -45,13 +96,16 @@ var config = {
       name: 'uu.js'
     },
     port: 8080,
-    defaultGrunt: ['develop', 'recess', 'uglify', 'watch'],
+    defaultGrunt: ['develop', 'recess', 'uglify' ],
     gruntConfiguration: {
       uglify: {
-        'app' : {
+        options: {
+          compress: true
         }
       }
-    }
+    },
+    extraHead: '',
+    performAdditionalConfiguration: function(grunt) {}
   }
 };
 
