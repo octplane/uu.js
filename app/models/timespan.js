@@ -15,6 +15,8 @@ ts.forEach(function(ts) {
 	secondsToExpiry[ts.duration] = ts.string;
 });
 
+exports.validTimeStamps = ts;
+
 // We work in ms
 exports.convertPostToDuration = function(expiryAsString, never) {
 	if (never)

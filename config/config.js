@@ -23,15 +23,20 @@ var config = {
     app: {
       name: 'uu.js'
     },
-    port: 3000
-  },
-
-  test: {
-    root: rootPath,
-    app: {
-      name: 'uu.js'
-    },
-    port: 3000
+    port: 3000,
+    defaultGrunt: ['develop', 'recess', 'uglify', 'watch'],
+    gruntConfiguration: {
+      uglify: {
+        'app' : {
+           options: {
+            beautify: {
+              width: 80,
+              beautify: true
+            }
+          }
+        }
+      }
+    }
   },
 
   production: {
@@ -39,7 +44,8 @@ var config = {
     app: {
       name: 'uu.js'
     },
-    port: 8080
+    port: 8080,
+    defaultGrunt: ['develop', 'recess', 'uglify', 'watch']
   }
 };
 

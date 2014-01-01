@@ -91,6 +91,32 @@ exports.paste = function(req, res) {
 
 };
 
+var timespan = require("../models/timespan");
+
+var expList = [];
+timespan.validTimeStamps.forEach(function (t) {
+	expList.push("'" + t.string + "'");
+})
+
+var help_text = "\nPaste API:\n" + 
+	"curl -dtext='sometext' -dexpire=DURATION -XPOST http://uu.zoy.fr/\n\n" +
+	"    expire can be in :\n    " + expList.join(", \n    ") + "\n" +
+	"OR\n" +
+	"    a number of second until expiration\n"
+
+help = function(reason, req, res) {
+	res.send(200, reason + help_text);
+}
+
+exports.paste_from_cli = function(req, res) {
+	if (!req.body.expire) {
+		help("Missing expire parameter.\n", req, res);
+	}
+	if (req.body.text) {
+
+	}
+};
+
 exports.upload = function(req, res) {
 	var f = req.files.file;
 	db.save_binary(f, function(err, id) {

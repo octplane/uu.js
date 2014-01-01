@@ -6,15 +6,14 @@ var kName = "x";
 
 function updateHash()
 {
-  var hashS ="";
-  if(password)
-  {
+  var hashS = "";
+  
+  if (password)
     hashS = hashS + kName + "=" + password;
-  }
-  if(cur_lang)
-  {
+  
+  if (cur_lang)
     hashS = hashS + "&lang=" + cur_lang;
-  }
+
   document.location.hash = hashS;
 }
 
@@ -23,9 +22,9 @@ function changeToLink(lang) {
 }
 
 function generatePassword(length) {
-  var pass=Math.abs(sjcl.random.randomWords(1)[0]);
+  var pass = Math.abs(sjcl.random.randomWords(1)[0]);
   var p = "";
-  while(p.length < length) {
+  while (p.length < length) {
     p = p + String.fromCharCode(97 + (pass % 26));
     pass = pass / 26;
     if(pass < 1) {
@@ -34,10 +33,11 @@ function generatePassword(length) {
   }
   return p;
 }
+
 function parseHash(hsh) {
-  p = hsh.split("&");
-  parms = {};
-  for(i=0; i < p.length; i++) {
+  var p = hsh.split("&");
+  var parms = {}, kv;
+  for(var i = 0; i < p.length; i++) {
     kv = p[i].split("=")
     parms[kv[0]] = kv[1];
   }
@@ -46,7 +46,7 @@ function parseHash(hsh) {
 
 function displayError() {
   setPasteto("Invalid key in url. Please make sure # parameter contains clef value");
-}
+};
 
 var parms = parseHash(window.location.hash.substr(1));
 var password;
@@ -75,9 +75,8 @@ function wakeUp() {
   $('#code').show();
   $('#spare').hide();
   $('#spare').height(80*$(window).height()/100);
-
-
 }
+
 function RNGisReady() {
   $('#gl-but').removeAttr("disabled");
   $('#gl-text').text("");
@@ -93,114 +92,6 @@ if(encrypted) {
     $("#clear_code").focus();
   });
 }
-
-
-$(document).ready(function() {
-  sjcl.random.startCollectors();
-  if(sjcl.random.isReady()) {
-    RNGisReady();
-  } else {
-    sjcl.random.addEventListener("seeded", function(){
-      RNGisReady();
-    });
-  }
-
-
-  $('#never_expire').change( function(o) {
-    var state = $(this).is(':checked');
-    if(state)
-    {
-      $('#expiry_delay').attr('disabled', 'disabled');
-    } else {
-      $('#expiry_delay').removeAttr('disabled');
-    }
-  });
-
-  $("#gluu_form").submit(function () {
-    var data = $("#clear_code").val();
-    if(!sjcl.random.isReady())
-    {
-      alert("RNG not ready, move you mouse a bit and try again.");
-      return false;
-    }
-
-    var encrypted = sjcl.encrypt(password, data);
-
-    var sent_data = { content: encrypted, attachments: $("#attachments").text() };
-
-    if($('#never_expire').is(':checked')) {
-      sent_data['never_expire'] = true;
-    } else {
-      sent_data['expiry_delay'] = $('#expiry_delay').val();
-    }
-
-    $.ajax({
-      type: "POST",
-      url: "/paste",
-      data: sent_data
-    }).done(function( dest_url ) {
-      document.location.href = dest_url + "#" + kName + "=" + password;
-    }).fail(function(jqXHR, textStatus) {
-      console.log( "Request failed: " + textStatus );
-    });
-
-    return false;
-
-  });
-
-  var elt = $("#code")[0];
-  if(elt) {
-    hljs.highlightBlock(elt);
-
-  }
-
-  if(parms['lang']) {
-    changeTo(parms['lang']);
-  }
-
-  Dropzone.options.uploader = {
-  paramName: "file", // The name that will be used to transfer the file
-  maxFilesize: 10, // MB
-  init: function() {
-    this.on("sending", function(file, xhr, formdata) {
-      var expiry;
-      $("#gl-but").attr("disabled", "disabled");
-      $("#gl-but").text("Upload in progress");
-
-      if($('#never_expire').is(':checked')) {
-        formdata.append('never_expire',true);
-      } else {
-        formdata.append('expiry_delay',$('#expiry_delay').val());
-      }
-    });
-
-    this.on("success", function(file, text) {
-      var ext = '';
-      // compute extname
-      if (file.name.indexOf('.') > 0)
-        ext = file.name.replace(/^.*\.([^\.]+)$/,"$1");
-      var input = $("#attachments");
-      var attachment = { aid: text, aext: ext };
-      var cAttachments;
-
-      if (input.text() != "") {
-        cAttachments = JSON.parse(input.text());
-      } else {
-        cAttachments = [];
-      }
-
-      cAttachments.push(attachment);
-      input.text(JSON.stringify(cAttachments));
-      return file.previewElement.classList.add("dz-success");
-    });
-
-    this.on("complete", function(file) {
-      $("#gl-but").removeAttr("disabled");
-      $("#gl-but").text("Gluu");
-    });
-  }};
-
- });
 
 function loadCssAtIdentifier(cssName, identifier)
 {
@@ -315,3 +206,110 @@ $('pre>code').each(function() {
 });
 
 };
+
+$(document).ready(function() {
+  sjcl.random.startCollectors();
+  if(sjcl.random.isReady()) {
+    RNGisReady();
+  } else {
+    sjcl.random.addEventListener("seeded", function(){
+      RNGisReady();
+    });
+  }
+
+
+  $('#never_expire').change( function(o) {
+    var state = $(this).is(':checked');
+    if(state)
+    {
+      $('#expiry_delay').attr('disabled', 'disabled');
+    } else {
+      $('#expiry_delay').removeAttr('disabled');
+    }
+  });
+
+  $("#gluu_form").submit(function () {
+    var data = $("#clear_code").val();
+    if(!sjcl.random.isReady())
+    {
+      alert("RNG not ready, move you mouse a bit and try again.");
+      return false;
+    }
+
+    var encrypted = sjcl.encrypt(password, data);
+
+    var sent_data = { content: encrypted, attachments: $("#attachments").text() };
+
+    if($('#never_expire').is(':checked')) {
+      sent_data['never_expire'] = true;
+    } else {
+      sent_data['expiry_delay'] = $('#expiry_delay').val();
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/paste",
+      data: sent_data
+    }).done(function( dest_url ) {
+      document.location.href = dest_url + "#" + kName + "=" + password;
+    }).fail(function(jqXHR, textStatus) {
+      console.log( "Request failed: " + textStatus );
+    });
+
+    return false;
+
+  });
+
+  var elt = $("#code")[0];
+  if(elt) {
+    hljs.highlightBlock(elt);
+
+  }
+
+  if(parms['lang']) {
+    changeTo(parms['lang']);
+  }
+
+  Dropzone.options.uploader = {
+  paramName: "file", // The name that will be used to transfer the file
+  maxFilesize: 10, // MB
+  init: function() {
+    this.on("sending", function(file, xhr, formdata) {
+      var expiry;
+      $("#gl-but").attr("disabled", "disabled");
+      $("#gl-but").text("Upload in progress");
+
+      if($('#never_expire').is(':checked')) {
+        formdata.append('never_expire',true);
+      } else {
+        formdata.append('expiry_delay',$('#expiry_delay').val());
+      }
+    });
+
+    this.on("success", function(file, text) {
+      var ext = '';
+      // compute extname
+      if (file.name.indexOf('.') > 0)
+        ext = file.name.replace(/^.*\.([^\.]+)$/,"$1");
+      var input = $("#attachments");
+      var attachment = { aid: text, aext: ext };
+      var cAttachments;
+
+      if (input.text() != "") {
+        cAttachments = JSON.parse(input.text());
+      } else {
+        cAttachments = [];
+      }
+
+      cAttachments.push(attachment);
+      input.text(JSON.stringify(cAttachments));
+      return file.previewElement.classList.add("dz-success");
+    });
+
+    this.on("complete", function(file) {
+      $("#gl-but").removeAttr("disabled");
+      $("#gl-but").text("Gluu");
+    });
+  }};
+
+ });

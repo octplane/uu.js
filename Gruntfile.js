@@ -1,6 +1,8 @@
 'use strict';
 
 var request = require('request');
+var config = require('./config/config');
+var merge = require('recursive-merge');
 
 module.exports = function (grunt) {
   // show elapsed time at the end
@@ -8,10 +10,11 @@ module.exports = function (grunt) {
   // load all grunt tasks
   require('load-grunt-tasks')(grunt);
   grunt.loadNpmTasks('grunt-recess');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   var reloadPort = 35729, files;
 
-  grunt.initConfig({
+  var gruntConfiguration = {
     pkg: grunt.file.readJSON('package.json'),
     develop: {
       server: {
@@ -24,10 +27,12 @@ module.exports = function (grunt) {
         livereload: reloadPort
       },
       css: {
-        files: [
-          'public/css/*.css'
-        ],
+        files: [ 'public/css/*.css' ],
         tasks: [ 'recess' ]
+      },
+      public_js: {
+        files: [ 'public/js/*.js' ],
+        tasks: [ 'uglify' ]
       },
       js: {
         files: [
@@ -51,16 +56,31 @@ module.exports = function (grunt) {
         },
         files: { 
           'compiled/css/app.css' : ['public/css/*.css']
-          // ,'compiled/js/app.js' : [
-          //   'public/js/uu.js',
-          //   'public/js/sjcl.js',
-          //   'public/js/dropzone.js',
-          //   'public/js/jquery-1.6.1.min.js',
-          //   'public/hi/highlight.pack.js'] 
+        }
+      }
+    },
+    uglify: {
+      'app' : {
+        files: { 
+          'compiled/js/app.js' : [
+            'public/js/jquery-1.6.1.min.js',
+            'public/js/uu.js',
+            'bower_components/sjcl/sjcl.js',
+            'bower_components/dropzone/downloads/dropzone.js',
+            'bower_components/highlightjs/highlight.pack.js'
+          ]
+        },
+        options: {
+          compress: false
         }
       }
     }
-  });
+  };
+
+  gruntConfiguration = merge(gruntConfiguration, config.gruntConfiguration);
+  console.log(gruntConfiguration);
+
+  grunt.initConfig(gruntConfiguration);
 
   grunt.config.requires('watch.js.files');
   files = grunt.config('watch.js.files');
@@ -80,5 +100,5 @@ module.exports = function (grunt) {
     }, 500);
   });
 
-  grunt.registerTask('default', ['develop', 'recess', 'watch']);
+  grunt.registerTask('default', config.defaultGrunt);
 };

@@ -37,7 +37,7 @@ module.exports = function(app, config) {
 
     // And the 404 finally
     app.use(function(req, res) {
-      res.status(404).render('misc/404', { title: '404' });
+      res.status(404).render('404', { title: '404' });
     });
 
   });
