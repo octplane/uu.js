@@ -45,7 +45,13 @@ var config = {
       name: 'uu.js'
     },
     port: 8080,
-    defaultGrunt: ['develop', 'recess', 'uglify', 'watch']
+    defaultGrunt: ['develop', 'recess', 'uglify', 'watch'],
+    gruntConfiguration: {
+      uglify: {
+        'app' : {
+        }
+      }
+    }
   }
 };
 

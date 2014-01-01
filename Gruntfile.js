@@ -78,7 +78,6 @@ module.exports = function (grunt) {
   };
 
   gruntConfiguration = merge(gruntConfiguration, config.gruntConfiguration);
-  console.log(gruntConfiguration);
 
   grunt.initConfig(gruntConfiguration);
 
