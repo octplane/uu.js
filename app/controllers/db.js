@@ -5,6 +5,8 @@ var fs = require('fs');
 
 exports.cleanup = function(req, res, next) {
 	db.remove(function (doc) {
+		if (!doc)
+			return false;
 		var willDelete = false;
 		if (doc.expire == -1)
 			willDelete = false;
@@ -21,7 +23,7 @@ exports.cleanup = function(req, res, next) {
 				db.binary.remove(at.aid);
 			});
 		}
-		return true;		
+		return true;
 	}, function(count) {
 		console.log("[CLEANUP] Removed "+count+ " items.");
 	}
