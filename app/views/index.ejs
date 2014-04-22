@@ -36,15 +36,15 @@
   </form>
 <? } else { ?>
 <script type="text/javascript">var encrypted = true;</script>
-	<div class='row'>
+  <div class='row'>
     <button class="btn btn-primary" id="reveal-but" type="submit">Raw</button> <button class="btn btn-primary" id="wrap-but" type="submit">Wrap-wrap-wrap</button>  This paste will <?if (never) { ?>never expire<? } else { ?> expire <?= expire ?> <? } ?> and is highlighted as <span id='hljs_lang' class='change_to'></span>.
-	</div>
+  </div>
   <div class='row url-container'><span class="icon permalink"><a href="">Link to this poste:  </a></span><input type="text" size="120" id="paste-url" value="??"></div>
-	<div class='paste-container'>
-		<pre>
-			<code id='code'></code>
-			<code id='encrypted'><?= encrypted_content ?></code>
-		</pre>
+  <div class='paste-container'>
+    <pre>
+      <code id='code'></code>
+      <code id='encrypted'><?= encrypted_content ?></code>
+    </pre>
     <textarea id='spare'></textarea>
     <div class="swhi">
     Switch highlight to
@@ -52,6 +52,6 @@
     </div>
     <div id="attachments"><?= attachments ?></div>
     <div id="companions"></div>
-	</div>
+  </div>
 <? } ?>
 <? include footer ?>
