@@ -1,10 +1,11 @@
 var crc32 = require('crc32'),
   btoa = require('btoa'),
-  moment = require('moment');
+  moment = require('moment'),
+  sjcl = require('sjcl');
+
 var db = require("./db");
 
 var timespan = require("../models/timespan");
-
 
 smallHash = function(text) {
   var crc = crc32(text), bytes = [], hash;
@@ -79,6 +80,7 @@ exports.paste = function(req, res) {
   var atts = null;
   if (req.body.attachments != "")
     atts = JSON.parse(req.body.attachments);
+
   var paste = {
     content: req.body.content,
     expire: timespan.convertPostToDuration(req.body.expiry_delay, req.body.never_expire),
@@ -105,16 +107,48 @@ var help_text = "\nPaste API:\n" +
   "    a number of second until expiration\n"
 
 help = function(reason, req, res) {
-  res.send(200, reason + help_text);
+  res.send(500, reason + help_text);
 }
 
 exports.paste_from_cli = function(req, res) {
-  if (!req.body.expire) {
-    help("Missing expire parameter.\n", req, res);
-  }
-  if (req.body.text) {
+  var text = "";
 
+  if (req.headers["content-type"] === "application/x-www-form-urlencoded" && !(text in req.body)) {
+    text = Object.keys(req.body)[0];
   }
+
+  if (text === "text") {
+    if (!req.body.text) {
+      console.log(req.body);
+      help("Missing text parameter", req, res);
+    }
+    text = req.body.text;
+  }
+
+  var expire = Date.now() + 7*24*3600*1000;
+  if (req.body.expire) {
+    if (req.body.expire == "-1") {
+      expire = -1;
+    } else if (timespan.labelToDuration[req.body.expire]) {
+      expire = timespan.convertPostToDuration(req.body.expire);
+    } else {
+      expire = Date.now() + req.body.expire * 1000;
+    }
+  }
+  var password = "nokeyyet"; // generatePassword(6);
+  var encrypted = sjcl.encrypt(password, text);
+  var content = encrypted;
+
+  var paste = {
+    content: content,
+    expire: expire,
+    never: req.body.never_expire,
+    attachments: null
+  }
+
+  db.save(smallHash(JSON.stringify(paste)), paste, function(err, identifier) {
+    res.redirect(303, "http://uu.zoy.fr/p/" + identifier + "#x=" + password);
+  });
 };
 
 exports.upload = function(req, res) {

@@ -26,16 +26,16 @@ module.exports = function (grunt) {
           compile: true,
           compress: false
         },
-        files: { 
+        files: {
           'compiled/css/app.css' : ['public/css/*.css']
         }
       }
     },
     uglify: {
       'app' : {
-        files: { 
+        files: {
           'compiled/js/app.js' : [
-            'public/js/jquery-1.6.1.min.js',
+            'bower_components/jquery/dist/jquery.js',
             'public/js/uu.js',
             'bower_components/sjcl/sjcl.js',
             'bower_components/dropzone/downloads/dropzone.js',

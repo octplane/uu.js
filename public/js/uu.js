@@ -52,8 +52,8 @@ var parms = parseHash(window.location.hash.substr(1));
 var password;
 
 function wakeUp() {
-  if(parms[kName] || params["clef"]) {
-    password = parms[kName] || params["clef"];
+  if(parms[kName]) {
+    password = parms[kName];
     var data = $('#encrypted').text();
     var atts = $('#attachments').text();
 

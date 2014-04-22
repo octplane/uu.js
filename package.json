@@ -1,6 +1,6 @@
 {
   "name": "uu.js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Private javascript paste",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,8 @@
     "atob": "~1.1.0",
     "send": "~0.1.4",
     "async": "~0.2.9",
-    "recursive-merge": "~1.2.0"
+    "recursive-merge": "~1.2.0",
+    "sjcl": "~1.0.0"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

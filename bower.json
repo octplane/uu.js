@@ -22,6 +22,7 @@
   "dependencies": {
     "dropzone": "~3.8.2",
     "sjcl": "~1.0.0",
-    "highlightjs": "8.0.0"
+    "highlightjs": "8.0.0",
+    "jquery": "~2.1.0"
   }
 }
