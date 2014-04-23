@@ -22,16 +22,17 @@ function changeToLink(lang) {
 }
 
 function generatePassword(length) {
-  var pass = Math.abs(sjcl.random.randomWords(1)[0]);
-  var p = "";
-  while (p.length < length) {
-    p = p + String.fromCharCode(97 + (pass % 26));
-    pass = pass / 26;
-    if(pass < 1) {
-      pass = Math.abs(sjcl.random.randomWords(1)[0]);
-    }
-  }
-  return p;
+  var pass = "";
+  sjcl.random.randomWords(length/4).forEach(function(e) {
+    var u,d,t,q;
+    u = e & 0x000000FF;
+    d = (e & 0x0000FF00) >> 8 ;
+    t = (e & 0x00FF0000) >> 16;
+    q = (e & 0xFF000000) >> 32;
+    st = String.fromCharCode(u,d,t,q);
+    pass += st;
+  });
+  return pass;
 }
 
 function parseHash(hsh) {
@@ -58,7 +59,7 @@ function wakeUp() {
     var atts = $('#attachments').text();
 
     try {
-      var ct = sjcl.decrypt(password, data);
+      var ct = sjcl.decrypt(atob(password), data);
       setPasteto(ct, parms["lang"]);
     } catch(e) {
       if(e instanceof sjcl.exception.corrupt) {
@@ -81,7 +82,7 @@ function RNGisReady() {
   $('#gl-but').removeAttr("disabled");
   $('#gl-text').text("");
   if(!password)
-    password = generatePassword(6);
+    password = generatePassword(12);
 
 }
 
@@ -251,7 +252,7 @@ $(document).ready(function() {
       url: "/paste",
       data: sent_data
     }).done(function( dest_url ) {
-      document.location.href = dest_url + "#" + kName + "=" + password;
+      document.location.href = dest_url + "#" + kName + "=" + btoa(password);
     }).fail(function(jqXHR, textStatus) {
       console.log( "Request failed: " + textStatus );
     });

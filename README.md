@@ -16,6 +16,7 @@ Features
 - The images or attachments you upload are not encrypted and clearly linked in the database server-side
 - No javascript tracker, almost no log on the server.
 - Very small footprint
+- Uses 12 bytes for random password
 
 Install
 =======
@@ -34,15 +35,12 @@ From the command line
 =====================
 
 ```
-curl -X POST -d @LICENSE -XPOST http://localhost:3000/
+curl -i -H "expire:60" -F name=upload -F filedata=@some-file.txt http://localhost:3000/
 ```
 or
 ```
-curl -X POST -dtext="Hello World" -XPOST http://localhost:3000/ -dexpire=60
+curl -X POST -dtext="Hello World" -dexpire=60 -XPOST http://localhost:3000/
 ```
-
-- Note that there is **no** random encryption possible yet on this endpoint.
-
 
 Configuration
 ===========

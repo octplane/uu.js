@@ -108,68 +108,86 @@ timespan.validTimeStamps.forEach(function (t) {
   expList.push("'" + t.string + "'");
 })
 
-var help_text = "\nPaste API:\n" + 
-  "curl -dtext='sometext' -dexpire=DURATION -XPOST http://uu.zoy.fr/\n\n" +
-  "    expire can be in :\n    " + expList.join(", \n    ") + "\n" +
+var help_text = "\nPaste API:\n" +
+"curl -i -H 'expire:60' -F name=upload -F filedata=@some-file.txt http://uu.zoy.fr/\n" +
+"curl -X POST -dtext='Hello World' -dexpire=60 -XPOST http://uu.zoy.fr/\n" +
+"    expire can be in :\n    " + expList.join(", \n    ") + "\n" +
   "OR\n" +
-  "    a number of second until expiration\n"
+"    a number of second until expiration (-1 for never)\n";
 
 help = function(reason, req, res) {
   res.send(500, reason + help_text);
 }
 
 function generatePassword(length) {
-  var pass = Math.abs(sjcl.random.randomWords(1)[0]);
-  var p = "";
-  while (p.length < length) {
-    p = p + String.fromCharCode(97 + (pass % 26));
-    pass = pass / 26;
-    if(pass < 1) {
-      pass = Math.abs(sjcl.random.randomWords(1)[0]);
-    }
+  var pass = "";
+  sjcl.random.randomWords(length/4).forEach(function(e) {
+    var u,d,t,q;
+    u = e & 0x000000FF;
+    d = (e & 0x0000FF00) >> 8 ;
+    t = (e & 0x00FF0000) >> 16;
+    q = (e & 0xFF000000) >> 32;
+    st = String.fromCharCode(u,d,t,q);
+    pass += st;
+  });
+  return pass;
+}
+
+function expireValueToDuration(requestVal) {
+  var expire;
+  if (requestVal == "-1") {
+    expire = -1;
+  } else if (timespan.labelToDuration[requestVal]) {
+    expire = timespan.convertPostToDuration(requestVal);
+  } else {
+    expire = Date.now() + requestVal * 1000;
   }
-  return p;
+  return expire
 }
 
 exports.paste_from_cli = function(req, res) {
-  var text = "";
-
-  if (req.headers["content-type"] === "application/x-www-form-urlencoded" && !(text in req.body)) {
-    text = Object.keys(req.body)[0];
-  }
-
-  if (text === "text") {
-    if (!req.body.text) {
-      console.log(req.body);
-      help("Missing text parameter", req, res);
-    }
-    text = req.body.text;
-  }
-
   var expire = Date.now() + 7*24*3600*1000;
-  if (req.body.expire) {
-    if (req.body.expire == "-1") {
-      expire = -1;
-    } else if (timespan.labelToDuration[req.body.expire]) {
-      expire = timespan.convertPostToDuration(req.body.expire);
-    } else {
-      expire = Date.now() + req.body.expire * 1000;
-    }
-  }
-  var password = generatePassword(6);
-  var encrypted = sjcl.encrypt(password, text);
-  var content = encrypted;
+  var password = generatePassword(12);
 
   var paste = {
-    content: content,
-    expire: expire,
-    never: req.body.never_expire,
+    never: (req.headers.expire && req.headers.expire === "-1") || (req.headers.never_expire && req.headers.never_expire === "yes") ,
     attachments: null
-  }
+  };
 
-  db.save(smallHash(JSON.stringify(paste)), paste, function(err, identifier) {
-    res.redirect(303, "http://uu.zoy.fr/p/" + identifier + "#x=" + password);
-  });
+  if ("files" in req && "filedata" in req.files) {
+    fs.readFile(req.files.filedata.path, function (err, data) {
+      var text = data.toString("utf-8");
+
+      if (req.headers.expire) {
+        console.log(req.headers.expire);
+        expire = expireValueToDuration(req.headers.expire);
+      }
+      var encrypted = sjcl.encrypt(password, text);
+      var content = encrypted;
+
+      paste.content = content;
+      paste.expire = expire;
+
+      db.save(smallHash(JSON.stringify(paste)), paste, function(err, identifier) {
+        res.redirect(303, "http://uu.zoy.fr/p/" + identifier + "#x=" + btoa(password));
+      });
+    });
+  } else if("body" in req && "text" in req.body) {
+    var text = req.body.text;
+
+    if (req.body.expire) {
+      expire = expireValueToDuration(req.body.expire);
+    }
+
+    paste.content = sjcl.encrypt(password, text);;
+    paste.expire = expire;
+
+    db.save(smallHash(JSON.stringify(paste)), paste, function(err, identifier) {
+      res.redirect(303, "http://uu.zoy.fr/p/" + identifier + "#x=" + btoa(password));
+    });
+  } else {
+    help("No filedata in files or body in request.", req, res);
+  }
 };
 
 exports.upload = function(req, res) {
