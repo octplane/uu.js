@@ -16,6 +16,11 @@
 <p>The server offer absolutely no warranty. I can delete, stop, start, modify it at any time. However, I <b>cannot read your pastes</b>.
 <p>This version is the third version after a ruby and Go version. This one runs on nodejs and was probably the fastest I developed of the three.</p>
 <p>UU is open source and can be downloaded from <a href="https://github.com/octplane/uu.js">GitHub</a>.</p>
-</div>
+<h2>CLI Upload</h2>
+<pre>
+curl -i -H "expire:60" -F name=upload -F filedata=@some-file.txt http://localhost:3000/
+# or
+curl -X POST -dtext="Hello World" -dexpire=60 -XPOST http://localhost:3000/
+</pre>
 
 <? include footer ?>
