@@ -1,11 +1,19 @@
 var crc32 = require('crc32'),
   btoa = require('btoa'),
   moment = require('moment'),
-  sjcl = require('sjcl');
+  sjcl = require('sjcl'),
+  crypto = require('crypto');
 
 var db = require("./db");
 
 var timespan = require("../models/timespan");
+
+crypto.randomBytes(1024/8, function(ex, buf) {
+  if (ex) throw ex;
+  var buf = crypto.randomBytes(1024/8).toString('utf8');
+  sjcl.random.addEntropy(buf.toString('utf8'), 1024, "crypto.randomBytes" );
+});
+
 
 smallHash = function(text) {
   var crc = crc32(text), bytes = [], hash;
@@ -110,6 +118,19 @@ help = function(reason, req, res) {
   res.send(500, reason + help_text);
 }
 
+function generatePassword(length) {
+  var pass = Math.abs(sjcl.random.randomWords(1)[0]);
+  var p = "";
+  while (p.length < length) {
+    p = p + String.fromCharCode(97 + (pass % 26));
+    pass = pass / 26;
+    if(pass < 1) {
+      pass = Math.abs(sjcl.random.randomWords(1)[0]);
+    }
+  }
+  return p;
+}
+
 exports.paste_from_cli = function(req, res) {
   var text = "";
 
@@ -135,7 +156,7 @@ exports.paste_from_cli = function(req, res) {
       expire = Date.now() + req.body.expire * 1000;
     }
   }
-  var password = "nokeyyet"; // generatePassword(6);
+  var password = generatePassword(6);
   var encrypted = sjcl.encrypt(password, text);
   var content = encrypted;
 
