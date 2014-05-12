@@ -290,7 +290,7 @@ button:active {
   font-size: 36px;
   line-height: 43px;
   color: #000000;
-  background-color: #eeecee;
+  background-color: rgba(238, 236, 238, 0.9);
 }
 
 .top-container a {

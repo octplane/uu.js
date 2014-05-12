@@ -95,8 +95,8 @@ exports.paste = function(req, res) {
 
   var paste = {
     content: req.body.content,
-    expire: timespan.convertPostToDuration(req.body.expiry_delay, req.body.never_expire),
-    never: req.body.never_expire,
+    expire: timespan.convertPostToDuration(req.body.expiry_delay, req.body.expiry_delay === "Never" || req.body.never_expire),
+    never: req.body.expiry_delay === "Never" || req.body.never_expire,
     attachments: atts
   }
   db.save(smallHash(JSON.stringify(paste)), paste, function(err, identifier) {

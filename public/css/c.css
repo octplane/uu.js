@@ -108,7 +108,7 @@ button:active{
 
 .top-container {
   position: relative;
-  background-color: rgba(238,236,238,100);
+  background-color: rgba(238,236,238, 0.9);
   font-family: Helvetica-Light;
   font-size: 36px;
   color: #000000;
