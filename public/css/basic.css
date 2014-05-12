@@ -10,7 +10,9 @@
 .dropzone {
   position: relative;
   border: 1px solid rgba(0,0,0,0.08);
-  background: rgba(0,0,0,0.02);
+  background: #EEECEC;
+  font-family: Helvetica-Light;
+  color: #000000;
   padding: 1em;
 }
 .dropzone.dz-clickable {

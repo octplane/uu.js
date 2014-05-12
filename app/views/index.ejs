@@ -1,45 +1,18 @@
 <? include head ?>
 <? if (!encrypted_content) { ?>
-<script type='text/javascript'>var encrypted = false;</script>
-  <form action='/' class='form-inline' id='gluu_form' method='POST'>
-    <div class="row">
-      <button class='btn btn-primary' disabled='disabled' id='gl-but' type='submit'>
-        Gluu
-      </button>
-      <span class="expi">
-        Expiration
-        <label class='checkbox'>
-          <input id='never_expire' name='never_expire' type='checkbox'>Never</input>
-        </label>
-        <label class="select">
-          <select class='span3' id='expiry_delay' name='expiry_delay'>
-            <option>5 minutes</option>
-            <option>30 minutes</option>
-            <option>1 hour</option>
-            <option>1 day</option>
-            <option selected='selected'>1 week</option>
-            <option>1 year</option>
-          </select>
-        </label>
-      </span>
-    </div>
     <span id='gl-text'>I need entropy... shake your mouse !</span>
     <div class="prison">
       <textarea id='clear_code' placeholder="Paste your code or text in this area..."></textarea>
     </div>
     <input id='attachments' type='hidden' />
-  </form>
-  <form action='/file-upload' class='dropzone' id='uploader'>
-    <div class='fallback'>
-      <input multiple='multiple' name='file' type='file' />
-    </div>
-  </form>
-<? } else { ?>
-<script type="text/javascript">var encrypted = true;</script>
-  <div class='row'>
-    <button class="btn btn-primary" id="reveal-but" type="submit">Raw</button> <button class="btn btn-primary" id="wrap-but" type="submit">Wrap-wrap-wrap</button>  This paste will <?if (never) { ?>never expire<? } else { ?> expire <?= expire ?> <? } ?> and is highlighted as <span id='hljs_lang' class='change_to'></span>.
   </div>
-  <div class='row url-container'><span class="icon permalink"><a href="">Link to this post: </a></span><input type="text" size="120" id="paste-url" value="??"></div>
+</form>
+<form action='/file-upload' class='dropzone' id='uploader'>
+  <div class='fallback'>
+    <input multiple='multiple' name='file' type='file' />
+  </div>
+</form>
+<? } else { ?>
   <div class='paste-container'>
     <pre>
       <code id='code'></code>

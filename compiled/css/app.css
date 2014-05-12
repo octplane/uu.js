@@ -12,7 +12,9 @@
 .dropzone {
   position: relative;
   padding: 1em;
-  background: rgba(0, 0, 0, 0.02);
+  font-family: Helvetica-Light;
+  color: #000000;
+  background: #EEECEC;
   border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
@@ -208,8 +210,8 @@ button[disabled] {
 select,
 button {
   padding: 2px 10px 2px 10px;
-  font-family: arial, serif;
-  font-size: 14px;
+  font-family: Helvetica-Light;
+  font-size: 36px;
   color: #000000;
   text-decoration: none;
   text-shadow: 0px 0px 5px #ffffff;
@@ -233,8 +235,8 @@ select[disabled] {
 
 button:hover {
   padding: 2px 10px 2px 10px;
-  font-family: arial, serif;
-  font-size: 14px;
+  font-family: Helvetica-Light;
+  font-size: 36px;
   color: #000000;
   text-decoration: none;
   text-shadow: 0px 0px 5px #ffffff;
@@ -254,8 +256,8 @@ button:hover {
 
 button:active {
   padding: 2px 10px 2px 10px;
-  font-family: arial, serif;
-  font-size: 14px;
+  font-family: Helvetica-Light;
+  font-size: 36px;
   color: #000000;
   text-decoration: none;
   text-shadow: 0px 0px 5px #ffffff;
@@ -283,13 +285,26 @@ button:active {
 
 .top-container {
   position: relative;
-  padding: 3px;
-  background-color: black;
+  height: 64px;
+  font-family: Helvetica-Light;
+  font-size: 36px;
+  line-height: 43px;
+  color: #000000;
+  background-color: #eeecee;
 }
 
 .top-container a {
-  color: white;
   text-decoration: none;
+}
+
+.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 64px;
+  padding: 0;
+  margin: 0;
 }
 
 .navbar {
@@ -297,12 +312,30 @@ button:active {
 }
 
 .top-container ul.nav {
-  display: inline;
+  display: inline-block;
+  width: 100%;
+  height: 64px;
+  padding: 0;
+  margin: 0;
 }
 
-.top-container ul.nav li {
+.top-container ul.nav.smaller {
+  font-size: 24px;
+}
+
+.top-container ul.nav:before,
+.right:before {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  content: "";
+}
+
+.top-container ul.nav li,
+ul.right li {
   display: inline;
   margin-left: 50px;
+  vertical-align: middle;
 }
 
 .action {
@@ -321,7 +354,7 @@ form {
 
 #gluu_form {
   position: absolute;
-  top: 3em;
+  top: 0;
   right: 0;
   bottom: 10em;
   left: 0;
@@ -329,7 +362,7 @@ form {
 
 .prison {
   position: absolute;
-  top: 2em;
+  top: 64px;
   right: 2%;
   bottom: 0;
   left: 2%;

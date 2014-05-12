@@ -35,13 +35,16 @@ smallHash = function(text) {
 exports.index = function(req, res){
   res.render('index', {
     title: 'Create a new paste',
-    encrypted_content: false
+    encrypted_content: false,
+    neutral_page: false
   });
 };
 
 exports.about = function(req, res) {
   res.render('about', {
-    title: 'About'
+    title: 'About',
+    encrypted_content: false,
+    neutral_page: true
   });
 };
 
@@ -61,6 +64,7 @@ exports.view_paste = function(req, res) {
         encrypted_content: doc.content,
         expire: doc.expire == -1 ? "" : moment(doc.expire).fromNow(),
         never: doc.expire == -1,
+        neutral_page: false,
         attachments: att.join("\n")
       });
     } else {

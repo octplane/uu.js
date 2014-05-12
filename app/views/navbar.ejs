@@ -1,13 +1,39 @@
+<? if (!encrypted_content) { ?>
+<form action='/' class='form-inline' id='gluu_form' method='POST'>
+<? } ?>
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
       <div class='top-container'>
+        <? if (!encrypted_content && !neutral_page) { ?>
         <ul class='nav'>
+          <script type='text/javascript'>var encrypted = false;</script>
+          <li><button class='btn btn-primary' disabled='disabled' id='gl-but' type='submit'>Paste</button></li>
+          <li>Expiration</li>
           <li>
-            <a href='/about'>About</a>
+            <label class="select">
+              <select class='span3' id='expiry_delay' name='expiry_delay'>
+                <option>5 minutes</option>
+                <option>30 minutes</option>
+                <option>1 hour</option>
+                <option>1 day</option>
+                <option selected='selected'>1 week</option>
+                <option>1 year</option>
+                <option>Never</option>
+              </select>
+            </label>
           </li>
-          <li>
-            <a href='/'>New Paste</a>
-          </li>
+        <? } else if(!neutral_page) { ?>
+        <ul class='nav smaller'>
+          <script type="text/javascript">var encrypted = true;</script>
+          <li><span class="icon permalink"><a href="">Link to this post: </a></span><input type="text" size="80" id="paste-url" value="??"></li>
+          <li><button class="btn btn-primary" id="reveal-but" type="submit">Raw</button> <button class="btn btn-primary" id="wrap-but" type="submit">Wrap text</button></li>
+          <li><?if (never) { ?>never expires<? } else { ?> expires <?= expire ?> <? } ?></li>
+          <li>highlighted as <span id='hljs_lang' class='change_to'></span>.</li>
+        <? } ?>
+        </ul>
+        <ul class="right">
+          <li><a href='/about'>?</a></li>
+          <li><a href='/'>/</a></li>
         </ul>
       </div>
   </div>

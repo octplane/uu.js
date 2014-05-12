@@ -34,10 +34,9 @@ select, button{
   border: 1px solid rgb(153, 153, 153);
   padding: 2px 10px 2px 10px;
   color:rgb(0, 0, 0);
-  font-size:14px;
-  font-family:arial, serif;
+  font-family: Helvetica-Light;
+  font-size: 36px;
   text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
   border-radius:5px 5px 5px 5px;
   -moz-border-radius:5px 5px 5px 5px;
   -webkit-border-radius:5px 5px 5px 5px;
@@ -60,10 +59,9 @@ button:hover{
   border: 1px solid rgb(153, 153, 153);
   padding: 2px 10px 2px 10px;
   color:rgb(0, 0, 0);
-  font-size:14px;
-  font-family:arial, serif;
+  font-family: Helvetica-Light;
+  font-size: 36px;
   text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
   border-radius:5px 5px 5px 5px;
   -moz-border-radius:5px 5px 5px 5px;
   -webkit-border-radius:5px 5px 5px 5px;
@@ -81,10 +79,9 @@ button:active{
   border: 1px solid rgb(153, 153, 153);
   padding: 2px 10px 2px 10px;
   color:rgb(0, 0, 0);
-  font-size:14px;
-  font-family:arial, serif;
+  font-family: Helvetica-Light;
+  font-size: 36px;
   text-shadow: 0px 0px 5px rgb(255, 255, 255);
-  font-size: 14px;
   border-radius:5px 5px 5px 5px;
   -moz-border-radius:5px 5px 5px 5px;
   -webkit-border-radius:5px 5px 5px 5px;
@@ -111,24 +108,55 @@ button:active{
 
 .top-container {
   position: relative;
-  background-color: black;
-  padding: 3px;
+  background-color: rgba(238,236,238,100);
+  font-family: Helvetica-Light;
+  font-size: 36px;
+  color: #000000;
+  line-height: 43px;
+  height: 64px;
 
 }
 .top-container a {
-  color: white;
   text-decoration: none;
 }
+
+.right {
+  position: absolute;
+  top: 0px;
+  height: 64px;
+  right: 0px;
+  width: 200px;
+  margin: 0px;
+  padding: 0px;
+}
+
 
 .navbar {
   margin: 0px;
 }
 
 .top-container ul.nav {
-  display: inline; 
+  display: inline-block;
+  height: 64px;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
 }
-.top-container ul.nav li {
-  display: inline; 
+.top-container ul.nav.smaller {
+  font-size: 24px;
+}
+
+
+.top-container ul.nav:before, .right:before {
+  content: "";
+  height: 100%;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.top-container ul.nav li, ul.right li {
+  display: inline;
+  vertical-align: middle;
   margin-left: 50px;
 }
 
@@ -148,7 +176,7 @@ form {
 }
 
 #gluu_form {
-  top: 3em;
+  top: 0px;
   bottom: 10em;
   position: absolute;
   left: 0px;
@@ -158,7 +186,7 @@ form {
 .prison {
   position: absolute;
   bottom: 0px;
-  top: 2em;
+  top: 64px;
   left:2%;
   right: 2%;
 }
