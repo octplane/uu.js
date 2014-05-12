@@ -8,13 +8,15 @@ exports.cleanup = function(req, res, next) {
     if (!doc)
       return false;
     var willDelete = false;
-    if (doc.expire == -1)
+
+    if (doc.expire == -1) {
       willDelete = false;
+    } else if (!doc.expire) {
+      willDelete = true;
+    } else {
+      willDelete = (doc.expire - Date.now()) < 0;
+    }
 
-    if (!doc.expire)
-      willDelete = true
-
-    willDelete = (doc.expire - Date.now()) < 0;
     if (!willDelete)
       return false;
     if (doc.attachments) {
