@@ -21,7 +21,7 @@ RUN \
 ENV PATH node_modules/.bin:$PATH
 RUN echo 'PATH=node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin' >> /etc/profile.d/nodejs.sh
 WORKDIR /root
-RUN npm install -g grunt
+RUN npm install -g grunt-cli
 
 
 # ### In Dockerfile:
@@ -33,4 +33,6 @@ RUN npm install -g grunt
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 WORKDIR /home/apps
-USER apps
+# USER apps
+
+RUN rm -rf /home/apps/tmp/
