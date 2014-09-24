@@ -27,16 +27,26 @@
           <script type="text/javascript">var encrypted = true;</script>
           <li><span class="icon permalink"><a href="">Link to this post: </a></span><input type="text" size="80" id="paste-url" value="??"></li>
           <li><button class="btn btn-primary" id="reveal-but" type="submit">Raw</button> <button class="btn btn-primary" id="wrap-but" type="submit">Wrap text</button></li>
-          <li><?if (never) { ?>never expires<? } else { ?> expires <?= expire ?> <? } ?></li>
-          <li>highlighted as <span id='hljs_lang' class='change_to'></span>.</li>
         <? } ?>
         </ul>
         <ul class="right">
-          <li><a href='/about'>?</a></li>
-          <li><a href='/'>/</a></li>
+          <li><a href='/about'>About</a></li>
+          <li><a href='/'>New</a></li>
         </ul>
       </div>
   </div>
 </div>
+
+<? if (encrypted_content) { ?>
+
+<div class="info">
+  <?if (never) { ?>never expires<? } else { ?> expires <?= expire ?> <? } ?>
+  .highlighted as <span id='hljs_lang' class='change_to'></span>.     <div class="swhi">
+    switch highlight to
+    <div id="placeholder">(if you don't see anything here, you should enable javascript on your browser :D)</div>
+    </div>
+</div>
+
+<? } ?>
 
 
